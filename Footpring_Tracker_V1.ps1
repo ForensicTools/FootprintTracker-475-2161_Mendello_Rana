@@ -14,6 +14,8 @@
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 
+	
+
 #Modules to import
 #ShowUI is used in HelpPage
 	import-Module ShowUI
@@ -24,9 +26,11 @@
 		{
 			Show-UI {
 			   StackPanel -Margin 10 -Children {
-				  TextBlock "Footprint Tracker Help Page" -FontSize 42 -FontWeight Bold -Foreground "#00ff0c" 
+				  TextBlock "Footprint Tracker Help Page" -FontSize 42 -FontWeight Bold #-Foreground "#ff9400" 
+				  #Background = "orange"
+				  
 				  TextBlock -FontSize 24 -Inlines {
-					 Bold "Question "
+					 Bold "Question: "
 					 "Do you want to leave us feedback? "
 					 Hyperlink "Click for Developer Page" -NavigateUri https://github.com/ForensicTools/FootprintTracker-475-2161_Mendello_Rana `
 											 -On_RequestNavigate { [Diagnostics.Process]::Start( $this.NavigateUri.ToString() ) }
@@ -60,8 +64,16 @@ average joe computer user, moms and dads etc."}
 				$objForm.Text = "Footprint Tracker"
 				$objForm.Size = New-Object System.Drawing.Size(500,300) 
 				$objForm.StartPosition = "CenterScreen"
+				
+				# Background color
+				# https://msdn.microsoft.com/en-us/library/system.drawing.color(v=vs.110).aspx
+				$objForm.BackColor = "DarkOrange"
+				
+				
 
-
+				# https://blogs.technet.microsoft.com/stephap/2012/04/23/building-forms-with-powershell-part-1-the-form/
+				
+				
 			# Here we are configuring our form to perform two things:
 			#	1) Use the ENTER key instead of OK button.
 			#	2) Use the ESC key instead of the Cancel button.
@@ -93,26 +105,100 @@ average joe computer user, moms and dads etc."}
 
 	function Buttons
 	{
+		$checkBox1 = New-Object System.Windows.Forms.CheckBox
+		$checkBox1.Location = New-Object System.Drawing.Point(300,125)
+		$checkBox1.Size = New-Object System.Drawing.Size(145,24)
+		$checkBox1.UseVisualStyleBackColor = $True
+		$checkBox1.TabIndex = 0
+		$Font = New-Object System.Drawing.Font("Times New Roman",11,[System.Drawing.FontStyle]::Bold)
+		$checkBox1.Font = $Font
+		$checkBox1.Text = "Create Report"
+		$checkBox1.DataBindings.DefaultDataSourceUpdateMode = 0
+		$checkBox1.Name = "checkBox1"
+		$objForm.Controls.Add($checkBox1)
+	
+	
+	
+	
 		$SubmitButton = New-Object System.Windows.Forms.Button
-		$SubmitButton.Location = New-Object System.Drawing.Size(200,200)
+		$SubmitButton.Location = New-Object System.Drawing.Size(200,230)
 		$SubmitButton.Size = New-Object System.Drawing.Size(75,23)
 		$SubmitButton.Text = "Submit"
 		$SubmitButton.Add_Click({$x=$objTextBox.Text;$objForm.Close()})
 		$objForm.Controls.Add($SubmitButton)
 
+		
 		$ExitButton = New-Object System.Windows.Forms.Button
-		$ExitButton.Location = New-Object System.Drawing.Size(275,200)
+		$ExitButton.Location = New-Object System.Drawing.Size(275,230)
 		$ExitButton.Size = New-Object System.Drawing.Size(75,23)
 		$ExitButton.Text = "Exit"
 		$ExitButton.Add_Click({$objForm.Close()})
 		$objForm.Controls.Add($ExitButton)
 
+		
 		$AboutButton = New-Object System.Windows.Forms.Button
 		$AboutButton.Location = New-Object System.Drawing.Size(400,5)
-		$AboutButton.Size = New-Object System.Drawing.Size(75,23)
+		$AboutButton.Size = New-Object System.Drawing.Size(75,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Italic)
+		$AboutButton.Font = $Font
 		$AboutButton.Text = "Help"
 		$AboutButton.Add_Click({HelpPage})
 		$objForm.Controls.Add($AboutButton)
+
+		
+		$BrowserPasswordButton = New-Object System.Windows.Forms.Button
+		$BrowserPasswordButton.Location = New-Object System.Drawing.Size(10,50)
+		$BrowserPasswordButton.Size = New-Object System.Drawing.Size(280,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
+		$BrowserPasswordButton.Font = $Font
+		$BrowserPasswordButton.Text = "1) Recover Passwords........................................................."
+		$BrowserPasswordButton.Add_Click({BrowserPasswords})
+		$objForm.Controls.Add($BrowserPasswordButton)
+
+		
+		$BrowserHistory = New-Object System.Windows.Forms.Button
+		$BrowserHistory.Location = New-Object System.Drawing.Size(10,75)
+		$BrowserHistory.Size = New-Object System.Drawing.Size(280,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
+		$BrowserHistory.Font = $Font
+		$BrowserHistory.Text = "2) Internet Browser History........................................................."
+		$BrowserHistory.Add_Click({})
+		$objForm.Controls.Add($BrowserHistory)
+		
+		$EDMSearch = New-Object System.Windows.Forms.Button
+		$EDMSearch.Location = New-Object System.Drawing.Size(10,100)
+		$EDMSearch.Size = New-Object System.Drawing.Size(280,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
+		$EDMSearch.Font = $Font
+		$EDMSearch.Text = "3) Exact Data Matching (EDM) ......."
+		$EDMSearch.Add_Click({})
+		$objForm.Controls.Add($EDMSearch)
+ 
+		$PatternMatching = New-Object System.Windows.Forms.Button
+		$PatternMatching.Location = New-Object System.Drawing.Size(10,125)
+		$PatternMatching.Size = New-Object System.Drawing.Size(280,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
+		$PatternMatching.Font = $Font
+		$PatternMatching.Text = "4) Pattern Matching..........................."
+		$PatternMatching.Add_Click({})
+		$objForm.Controls.Add($PatternMatching)
+		
+
+		$RunEverything = New-Object System.Windows.Forms.Button
+		$RunEverything.Location = New-Object System.Drawing.Size(10,150)
+		$RunEverything.Size = New-Object System.Drawing.Size(280,26)
+		# Font styles are: Regular, Bold, Italic, Underline, Strikeout
+		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
+		$RunEverything.Font = $Font
+		$RunEverything.Text = "5) Run everything......................................"
+		$RunEverything.Add_Click({})
+		$objForm.Controls.Add($RunEverything)		
+		
 	}
 
 
@@ -124,50 +210,56 @@ average joe computer user, moms and dads etc."}
 		$objLabel.Text = "Please Enter Operation Number"
 		$objForm.Controls.Add($objLabel) 
 
-		$objLabel = New-Object System.Windows.Forms.Label
-		$objLabel.Location = New-Object System.Drawing.Size(40,50) 
-		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
-		$objLabel.Text = "1) Recover Deleted Files"
-		$objForm.Controls.Add($objLabel) 
 
-		$objLabel = New-Object System.Windows.Forms.Label
-		$objLabel.Location = New-Object System.Drawing.Size(40,70) 
-		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
-		$objLabel.Text = "2) Parse Internet Browser History"
-		$objForm.Controls.Add($objLabel) 
-		 
-		$objLabel = New-Object System.Windows.Forms.Label
-		$objLabel.Location = New-Object System.Drawing.Size(40,90) 
-		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
-		$objLabel.Text = "3) Exact Data Matching (EDM) Search"
-		$objForm.Controls.Add($objLabel) 
-
-		$objLabel = New-Object System.Windows.Forms.Label
-		$objLabel.Location = New-Object System.Drawing.Size(40,110) 
-		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
-		$objLabel.Text = "4) Analyze Documents"
-		$objForm.Controls.Add($objLabel) 
-
-		$objLabel = New-Object System.Windows.Forms.Label
-		$objLabel.Location = New-Object System.Drawing.Size(40,130) 
-		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
-		$objLabel.Text = "5) Regular Expression Search"
-		$objForm.Controls.Add($objLabel) 
 	}
 
 	function MenuInput
 	{
 		$objTextBox = New-Object System.Windows.Forms.TextBox 
-		$objTextBox.Location = New-Object System.Drawing.Size(140,175) 
+		$objTextBox.Location = New-Object System.Drawing.Size(140,210) 
 		$objTextBox.Size = New-Object System.Drawing.Size(260,20) 
-		$objForm.Controls.Add($objTextBox) 
-
-		$objForm.Topmost = $True
+		$objForm.Controls.Add($objTextBox) 	
+		
+		
+		
+		#Set the Topmost property to $false to NOT force the window to open atop other open windows and dialog boxes.
+		$objForm.Topmost = $False
 		$objForm.Add_Shown({$objForm.Activate()})
 		[void] $objForm.ShowDialog()
 	}	
+
+
+
+
+
+	function searchFilesEDM
+		{
+			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name
+		}
+
+
+		
+
+# list out all of the entries in the Credential Manager
+# http://www.toddklindt.com/blog/Lists/Posts/Post.aspx?ID=606
+
+	function BrowserPasswords
+		{
+			$FileName = "Browser_Passwords"
+			[void][Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]
+			$vault = New-Object Windows.Security.Credentials.PasswordVault 
+			$vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Out-Gridview
+			# $vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Export-CSV -Path "$home\Desktop\BrowserPasswords.csv"
+		}
+
+
 
 	
 WindowsForm
 
 # Source: https://technet.microsoft.com/en-us/library/ff730941.aspx
+
+
+
+
+
