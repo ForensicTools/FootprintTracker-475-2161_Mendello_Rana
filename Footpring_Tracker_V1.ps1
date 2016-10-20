@@ -14,14 +14,14 @@
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 
-	
+
 
 #Modules to import
 #ShowUI is used in HelpPage
 	import-Module ShowUI
 
-	
-	
+#Added functionality for outputting EDM search data to DialogBox output 	
+
 	function HelpPage
 		{
 			Show-UI {
@@ -38,9 +38,9 @@
 TextBlock -FontSize 16 -Inlines {
 Span -FontSize 24 -FontWeight Bold -Inlines "Project Purpose:"
 "
-The purpose of this program is simple, to provide the typical user 
+The purpose of this program is simple, to provide the typical user
 a free and simple solution to finding out what their windows based 
-computer knows about them. This will be a free tool geared for the 
+computer knows about them. This will be a free tool geared for the
 average joe computer user, moms and dads etc."}
 			}
 			}
@@ -165,9 +165,10 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$BrowserHistory.Font = $Font
 		$BrowserHistory.Text = "2) Internet Browser History........................................................."
-		$BrowserHistory.Add_Click({})
-		$objForm.Controls.Add($BrowserHistory)
-		
+		$BrowserHistory.Add_Click({$textboxBH.Text = BrowserPasswords | Out-String})
+		# Still working this^ out, something wrong with the BrowserPasswords function
+                $objForm.Controls.Add($BrowserHistory)
+
 		$EDMSearch = New-Object System.Windows.Forms.Button
 		$EDMSearch.Location = New-Object System.Drawing.Size(10,100)
 		$EDMSearch.Size = New-Object System.Drawing.Size(280,26)
@@ -175,9 +176,11 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$EDMSearch.Font = $Font
 		$EDMSearch.Text = "3) Exact Data Matching (EDM) ......."
-		$EDMSearch.Add_Click({})
-		$objForm.Controls.Add($EDMSearch)
- 
+		$EDMSearch.Add_Click({$textboxEDM.Text = searchFilesEDM | Out-GridView})
+		# Got this working by piping output to a DialogBox with GridView upon a button click
+                $objForm.Controls.Add($EDMSearch)
+
+
 		$PatternMatching = New-Object System.Windows.Forms.Button
 		$PatternMatching.Location = New-Object System.Drawing.Size(10,125)
 		$PatternMatching.Size = New-Object System.Drawing.Size(280,26)
@@ -197,7 +200,7 @@ average joe computer user, moms and dads etc."}
 		$RunEverything.Font = $Font
 		$RunEverything.Text = "5) Run everything......................................"
 		$RunEverything.Add_Click({})
-		$objForm.Controls.Add($RunEverything)		
+		$objForm.Controls.Add($RunEverything)
 		
 	}
 
@@ -235,10 +238,11 @@ average joe computer user, moms and dads etc."}
 	function searchFilesEDM
 		{
 			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name
+
 		}
 
 
-		
+
 
 # list out all of the entries in the Credential Manager
 # http://www.toddklindt.com/blog/Lists/Posts/Post.aspx?ID=606
