@@ -20,7 +20,7 @@
 #ShowUI is used in HelpPage
 	import-Module ShowUI
 
-#Added functionality for outputting EDM search data to DialogBox output 	
+#Added functionality for outputting EDM search data to DialogBox output
 
 	function HelpPage
 		{
@@ -154,7 +154,7 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$BrowserPasswordButton.Font = $Font
 		$BrowserPasswordButton.Text = "1) Recover Passwords........................................................."
-		$BrowserPasswordButton.Add_Click({BrowserPasswords})
+		$BrowserPasswordButton.Add_Click({BrowserPasswords|Out-GridView})
 		$objForm.Controls.Add($BrowserPasswordButton)
 
 		
@@ -165,7 +165,7 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$BrowserHistory.Font = $Font
 		$BrowserHistory.Text = "2) Internet Browser History........................................................."
-		$BrowserHistory.Add_Click({$textboxBH.Text = BrowserPasswords | Out-String})
+		$BrowserHistory.Add_Click({})
 		# Still working this^ out, something wrong with the BrowserPasswords function
                 $objForm.Controls.Add($BrowserHistory)
 
@@ -176,7 +176,7 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$EDMSearch.Font = $Font
 		$EDMSearch.Text = "3) Exact Data Matching (EDM) ......."
-		$EDMSearch.Add_Click({$textboxEDM.Text = searchFilesEDM | Out-GridView})
+		$EDMSearch.Add_Click({$textboxEDM.Text = searchFilesEDM})
 		# Got this working by piping output to a DialogBox with GridView upon a button click
                 $objForm.Controls.Add($EDMSearch)
 
@@ -237,7 +237,7 @@ average joe computer user, moms and dads etc."}
 
 	function searchFilesEDM
 		{
-			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name
+			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name | Out-GridView
 
 		}
 
