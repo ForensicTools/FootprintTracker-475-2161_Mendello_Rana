@@ -14,14 +14,14 @@
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 	[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 
-
+	
 
 #Modules to import
 #ShowUI is used in HelpPage
 	import-Module ShowUI
 
-#Added functionality for outputting EDM search data to DialogBox output
-
+	
+	
 	function HelpPage
 		{
 			Show-UI {
@@ -38,9 +38,9 @@
 TextBlock -FontSize 16 -Inlines {
 Span -FontSize 24 -FontWeight Bold -Inlines "Project Purpose:"
 "
-The purpose of this program is simple, to provide the typical user
+The purpose of this program is simple, to provide the typical user 
 a free and simple solution to finding out what their windows based 
-computer knows about them. This will be a free tool geared for the
+computer knows about them. This will be a free tool geared for the 
 average joe computer user, moms and dads etc."}
 			}
 			}
@@ -105,6 +105,9 @@ average joe computer user, moms and dads etc."}
 
 	function Buttons
 	{
+	#The purpose of this Button is to give the user an option to create and export ESV files
+	#This value needs to be saved and passed into a function to that will check if perform exports of each function
+	#that is called
 		$checkBox1 = New-Object System.Windows.Forms.CheckBox
 		$checkBox1.Location = New-Object System.Drawing.Point(300,125)
 		$checkBox1.Size = New-Object System.Drawing.Size(145,24)
@@ -117,17 +120,14 @@ average joe computer user, moms and dads etc."}
 		$checkBox1.Name = "checkBox1"
 		$objForm.Controls.Add($checkBox1)
 	
-	
-	
-	
+	#The submit button needs to be associated with the input box
 		$SubmitButton = New-Object System.Windows.Forms.Button
 		$SubmitButton.Location = New-Object System.Drawing.Size(200,230)
 		$SubmitButton.Size = New-Object System.Drawing.Size(75,23)
 		$SubmitButton.Text = "Submit"
 		$SubmitButton.Add_Click({$x=$objTextBox.Text;$objForm.Close()})
 		$objForm.Controls.Add($SubmitButton)
-
-		
+# The exit button is simply an easy way for the user to exit. May be removed, not really recessary
 		$ExitButton = New-Object System.Windows.Forms.Button
 		$ExitButton.Location = New-Object System.Drawing.Size(275,230)
 		$ExitButton.Size = New-Object System.Drawing.Size(75,23)
@@ -135,7 +135,8 @@ average joe computer user, moms and dads etc."}
 		$ExitButton.Add_Click({$objForm.Close()})
 		$objForm.Controls.Add($ExitButton)
 
-		
+# The Help Button is used to trigger the Help function which will open a new page
+#presenting the user with a description of the program, how it works, and a link to the github
 		$AboutButton = New-Object System.Windows.Forms.Button
 		$AboutButton.Location = New-Object System.Drawing.Size(400,5)
 		$AboutButton.Size = New-Object System.Drawing.Size(75,26)
@@ -146,7 +147,8 @@ average joe computer user, moms and dads etc."}
 		$AboutButton.Add_Click({HelpPage})
 		$objForm.Controls.Add($AboutButton)
 
-		
+#This button and the function associated with this button is complete
+# the export command is commented out in the function it calls until we implement the export IF check
 		$BrowserPasswordButton = New-Object System.Windows.Forms.Button
 		$BrowserPasswordButton.Location = New-Object System.Drawing.Size(10,50)
 		$BrowserPasswordButton.Size = New-Object System.Drawing.Size(280,26)
@@ -157,7 +159,8 @@ average joe computer user, moms and dads etc."}
 		$BrowserPasswordButton.Add_Click({BrowserPasswords})
 		$objForm.Controls.Add($BrowserPasswordButton)
 
-		
+	# This button is a place holder it current does not have a function associated with it.
+	#The function for this button will need to be created and written. it is not started yet
 		$BrowserHistory = New-Object System.Windows.Forms.Button
 		$BrowserHistory.Location = New-Object System.Drawing.Size(10,75)
 		$BrowserHistory.Size = New-Object System.Drawing.Size(280,26)
@@ -166,9 +169,12 @@ average joe computer user, moms and dads etc."}
 		$BrowserHistory.Font = $Font
 		$BrowserHistory.Text = "2) Internet Browser History........................................................."
 		$BrowserHistory.Add_Click({})
-		# Still working this^ out, something wrong with the BrowserPasswords function
-                $objForm.Controls.Add($BrowserHistory)
+		$objForm.Controls.Add($BrowserHistory)
 
+#This button is done. The function associated with it needs to be linked and also written
+#we need the function to search for user inputted string characters
+#I believe the function has an example that searches for the word "David"
+#The word David needs to be replaced with the value obtained from the textbox
 		$EDMSearch = New-Object System.Windows.Forms.Button
 		$EDMSearch.Location = New-Object System.Drawing.Size(10,100)
 		$EDMSearch.Size = New-Object System.Drawing.Size(280,26)
@@ -176,11 +182,13 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$EDMSearch.Font = $Font
 		$EDMSearch.Text = "3) Exact Data Matching (EDM) ......."
-		$EDMSearch.Add_Click({$textboxEDM.Text = searchFilesEDM})
-		# Got this working by piping output to a DialogBox with GridView upon a button click
-                $objForm.Controls.Add($EDMSearch)
-
-
+		$EDMSearch.Add_Click({$textboxEDM.Text = searchFilesEDM}) #EDM File Function Called after updating, using value "David" as a test
+		#working on adding user input box for argument input
+		$objForm.Controls.Add($EDMSearch)
+ 
+ #This button is complete. The function is not created yet. It will need to be created
+ #The aproach for this will be to use REGULAR EXPRESSIONS 
+ #We need to write generic REGEXP to search for SSN, CC, Driver License, etc
 		$PatternMatching = New-Object System.Windows.Forms.Button
 		$PatternMatching.Location = New-Object System.Drawing.Size(10,125)
 		$PatternMatching.Size = New-Object System.Drawing.Size(280,26)
@@ -188,10 +196,11 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$PatternMatching.Font = $Font
 		$PatternMatching.Text = "4) Pattern Matching..........................."
-		$PatternMatching.Add_Click({})
+		$PatternMatching.Add_Click({}) #We will add the function searchREGEXP after it is written
 		$objForm.Controls.Add($PatternMatching)
 		
-
+#The function for this has not been written, this will basically be calling a function 
+#That will perform all of the options, so this function will call all the other functions
 		$RunEverything = New-Object System.Windows.Forms.Button
 		$RunEverything.Location = New-Object System.Drawing.Size(10,150)
 		$RunEverything.Size = New-Object System.Drawing.Size(280,26)
@@ -200,7 +209,7 @@ average joe computer user, moms and dads etc."}
 		$RunEverything.Font = $Font
 		$RunEverything.Text = "5) Run everything......................................"
 		$RunEverything.Add_Click({})
-		$objForm.Controls.Add($RunEverything)
+		$objForm.Controls.Add($RunEverything)		
 		
 	}
 
@@ -216,6 +225,8 @@ average joe computer user, moms and dads etc."}
 
 	}
 
+#The purpose of this function is to only work with user inputs, so the things 
+#associated with it are the string characters and the Export CSV check box
 	function MenuInput
 	{
 		$objTextBox = New-Object System.Windows.Forms.TextBox 
@@ -223,26 +234,25 @@ average joe computer user, moms and dads etc."}
 		$objTextBox.Size = New-Object System.Drawing.Size(260,20) 
 		$objForm.Controls.Add($objTextBox) 	
 		
-		
-		
 		#Set the Topmost property to $false to NOT force the window to open atop other open windows and dialog boxes.
 		$objForm.Topmost = $False
 		$objForm.Add_Shown({$objForm.Activate()})
 		[void] $objForm.ShowDialog()
-	}	
+	}
 
 
 
 
-
+#The SearchFIlesEDM function needs to be associated with the ObjTextBox value in the MenuInput
+#We need to save the ObjTextBox input value into a variable and replace the current pattern "David"
+#with the value the user inputs in ObjTextBox
 	function searchFilesEDM
 		{
-			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name | Out-GridView
-
+			Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name | Out-Gridview
 		}
 
 
-
+		
 
 # list out all of the entries in the Credential Manager
 # http://www.toddklindt.com/blog/Lists/Posts/Post.aspx?ID=606
@@ -253,17 +263,25 @@ average joe computer user, moms and dads etc."}
 			[void][Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]
 			$vault = New-Object Windows.Security.Credentials.PasswordVault 
 			$vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Out-Gridview
+			#This is commented out becuase it works, the next step is to do an if
+			#statement saying that if the checkbox is set, do this command
+			#it would also be good to write another function at the start of the 
+			#program to check if there is an old export file in the directory, and if there is to delete it
 			# $vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Export-CSV -Path "$home\Desktop\BrowserPasswords.csv"
 		}
 
+	function searchREGEXP
+		{
+		
+		
+		
+		
+		}
 
-
+		
+		
+		
 	
 WindowsForm
 
 # Source: https://technet.microsoft.com/en-us/library/ff730941.aspx
-
-
-
-
-
