@@ -154,7 +154,7 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$BrowserPasswordButton.Font = $Font
 		$BrowserPasswordButton.Text = "1) Recover Passwords........................................................."
-		$BrowserPasswordButton.Add_Click({BrowserPasswords|Out-GridView})
+		$BrowserPasswordButton.Add_Click({BrowserPasswords})
 		$objForm.Controls.Add($BrowserPasswordButton)
 
 		
