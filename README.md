@@ -40,5 +40,3 @@ Project Features:
     •	Confidential Documents
   •	List of installed programs
   •	Remediation Suggestions and instructions
-  
-  Test commit
