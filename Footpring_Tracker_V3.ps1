@@ -64,25 +64,25 @@ average joe computer user, moms and dads etc."}
 				$objForm.Text = "Footprint Tracker"
 				$objForm.Size = New-Object System.Drawing.Size(500,300) 
 				$objForm.StartPosition = "CenterScreen"
-				
+
 				# Background color
 				# https://msdn.microsoft.com/en-us/library/system.drawing.color(v=vs.110).aspx
 				$objForm.BackColor = "DarkOrange"
-				
-				
+
+
 
 				# https://blogs.technet.microsoft.com/stephap/2012/04/23/building-forms-with-powershell-part-1-the-form/
 				
 				
 			# Here we are configuring our form to perform two things:
-			#	1) Use the ENTER key instead of OK button.
+			#       1) Use the ENTER key instead of OK button.
 			#	2) Use the ESC key instead of the Cancel button.
 			<#
 			In order to do this we first set the KeyPreview 
 			property to true ($True); that tells the form to 
 			intercept specific keystrokes rather than allow those 
 			keystrokes to be used by the controls on the form. 
-			What keystrokes do we want to capture? You got it: the ENTER 
+			What keystrokes do we want to capture? You got it: the ENTER
 			key and the ESC (Escape) key. Notice the syntax for capturing a 
 			keystroke
 			#>
@@ -93,14 +93,66 @@ average joe computer user, moms and dads etc."}
 				$objForm.Add_KeyDown({if ($_.KeyCode -eq "Escape") 
 					{$objForm.Close()}})
 		
-		
+
 			Buttons
 			MainMenuLabels
-			MenuInput
-			
-		
+                        MenuInput
+
+
 		}
+
+                #New form dialog box for search string input for EDM
+                function WindowsForm1
+		{
+			# Now we can instantiate a new instance of the .NET Framework class System.Window.Forms.Form
+			#	This will present the blank form (window) that we can add controls to
+				$objForm = New-Object System.Windows.Forms.Form 
+
+
+			#Now that we have an instance of the Form class we can then assign values to three properties of this class:
+			#	Text - Disregard the name, this is actually the window title.
+			#	Size - This is the size of the form, in pixels. In our case, we're creating a form that's 500 pixels wide by 300 pixels tall.
+			#	StartingPosition - This is option; if this property is left out, Windows will pick a location to use when displaying this form.
+                        #       By setting the StartingPosition to CenterScreen our form will automatically be displayed in the middle of the screen each time it loads.
+				$objForm.Text = "Footprint Tracker"
+				$objForm.Size = New-Object System.Drawing.Size(500,300) 
+				$objForm.StartPosition = "CenterScreen"
+
+				# Background color
+				# https://msdn.microsoft.com/en-us/library/system.drawing.color(v=vs.110).aspx
+				$objForm.BackColor = "DarkOrange"
+
+
+
+				# https://blogs.technet.microsoft.com/stephap/2012/04/23/building-forms-with-powershell-part-1-the-form/
+				
+				
+			# Here we are configuring our form to perform two things:
+			#       1) Use the ENTER key instead of OK button.
+			#	2) Use the ESC key instead of the Cancel button.
+			<#
+			In order to do this we first set the KeyPreview 
+			property to true ($True); that tells the form to 
+			intercept specific keystrokes rather than allow those 
+			keystrokes to be used by the controls on the form. 
+			What keystrokes do we want to capture? You got it: the ENTER
+			key and the ESC (Escape) key. Notice the syntax for capturing a 
+			keystroke
+			#>
+
+				$objForm.KeyPreview = $True
+				$objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter")
+					{$x=$objTextBox.Text;$objForm.Close()}})
+				$objForm.Add_KeyDown({if ($_.KeyCode -eq "Escape") 
+					{$objForm.Close()}})
 		
+
+			SubmitButton1
+			MainMenuLabels1
+                        MenuInputEDM
+
+
+		}
 
 
 	function Buttons
@@ -184,7 +236,7 @@ average joe computer user, moms and dads etc."}
 		$Font = New-Object System.Drawing.Font("Times New Roman",14,[System.Drawing.FontStyle]::Regular)
 		$EDMSearch.Font = $Font
 		$EDMSearch.Text = "3) Exact Data Matching (EDM) ......."
-		$EDMSearch.Add_Click({searchFilesEDM}) #Here is where we would call the function searchFilesEDM after it is written
+		$EDMSearch.Add_Click({WindowsForm1}) #New EDM search string form is called
 		$objForm.Controls.Add($EDMSearch)
  
  #This button is complete. The function is not created yet. It will need to be created
@@ -223,8 +275,17 @@ average joe computer user, moms and dads etc."}
 		$RunEverything.Text = "6) Run everything......................................"
 		$RunEverything.Add_Click({})
 		$objForm.Controls.Add($RunEverything)		
-		
+
 	}
+        #EDM Search input box submission button, send input out to EDM Search function and outputs value as grid
+	function SubmitButton1 {
+                $SubmitButton = New-Object System.Windows.Forms.Button
+		$SubmitButton.Location = New-Object System.Drawing.Size(200,230)
+		$SubmitButton.Size = New-Object System.Drawing.Size(75,23)
+		$SubmitButton.Text = "Submit"
+		$SubmitButton.Add_Click({$x=$objTextBox.Text;searchFilesEDM})
+		$objForm.Controls.Add($SubmitButton)
+        }
 
 
 	function MainMenuLabels
@@ -235,22 +296,46 @@ average joe computer user, moms and dads etc."}
 		$objLabel.Text = "Please Enter Operation Number"
 		$objForm.Controls.Add($objLabel) 
 	}
+	
+	function MainMenuLabels1
+	{
+		$objLabel = New-Object System.Windows.Forms.Label
+		$objLabel.Location = New-Object System.Drawing.Size(10,20) 
+		$objLabel.Size = New-Object System.Drawing.Size(280,20) 
+		$objLabel.Text = "Please input EDM search string"
+		$objForm.Controls.Add($objLabel) 
+	}
 
 #The purpose of this function is to only work with user inputs, so the things 
 #associated with it are the string characters and the Export CSV check box
 	function MenuInput
 	{
-# COmmented out until the new buttons are complete will reenable when the time comes
-	<# 		$objTextBox = New-Object System.Windows.Forms.TextBox 
-		$objTextBox.Location = New-Object System.Drawing.Size(140,210) 
-		$objTextBox.Size = New-Object System.Drawing.Size(260,20) 
-		$objForm.Controls.Add($objTextBox) 	
-		 #>
+                # Commented out until the new buttons are complete will reenable when the time comes
+		#$objTextBox = New-Object System.Windows.Forms.TextBox
+		#$objTextBox.Location = New-Object System.Drawing.Size(140,210)
+		#$objTextBox.Size = New-Object System.Drawing.Size(260,20)
+		#$objForm.Controls.Add($objTextBox)
+
+		#Set the Topmost property to $false to NOT force the window to open atop other open windows and dialog boxes.
+		#$objForm.Topmost = $False
+		#$objForm.Add_Shown({$objForm.Activate()})
+		[void] $objForm.ShowDialog()
+	}
+        #Input-box dialog made for EDM search string input from user
+	function MenuInputEDM
+	{
+                # Commented out until the new buttons are complete will reenable when the time comes
+		$objTextBox = New-Object System.Windows.Forms.TextBox
+		$objTextBox.Location = New-Object System.Drawing.Size(140,210)
+		$objTextBox.Size = New-Object System.Drawing.Size(260,20)
+                #$global:input1 = $objTextBox.Text
+                $objForm.Controls.Add($objTextBox)
+
 		#Set the Topmost property to $false to NOT force the window to open atop other open windows and dialog boxes.
 		$objForm.Topmost = $False
 		$objForm.Add_Shown({$objForm.Activate()})
 		[void] $objForm.ShowDialog()
-	}	
+	}
 
 
 # Done
@@ -259,19 +344,19 @@ average joe computer user, moms and dads etc."}
 			ipconfig /displaydns | select-string 'Record Name' | foreach-object { $_.ToString().Split(' ')[-1]   } | Sort | Out-Gridview
 			#ipconfig /displaydns | select-string 'Record Name' | foreach-object { $_.ToString().Split(' ')[-1]   } | Sort | Export-CSV -Path "$home\Desktop\DNSRecords.csv
 		}
-	
+
 		# Done
 	function BrowserPasswords
 		{
 			$FileName = "Browser_Passwords"
 			[void][Windows.Security.Credentials.PasswordVault,Windows.Security.Credentials,ContentType=WindowsRuntime]
-			$vault = New-Object Windows.Security.Credentials.PasswordVault 
+			$vault = New-Object Windows.Security.Credentials.PasswordVault
 			$vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Out-Gridview
 			#This is commented out becuase it works, the next step is to do an if
 			#statement saying that if the checkbox is set, do this command
-			#it would also be good to write another function at the start of the 
+			#it would also be good to write another function at the start of the
 			#program to check if there is an old export file in the directory, and if there is to delete it
-			# $vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Export-CSV -Path "$home\Desktop\BrowserPasswords.csv"		
+			# $vault.RetrieveAll() | % { $_.RetrievePassword();$_ } | Export-CSV -Path "$home\Desktop\BrowserPasswords.csv"
 			# list out all of the entries in the Credential Manager
 			# http://www.toddklindt.com/blog/Lists/Posts/Post.aspx?ID=606
 		}
@@ -308,13 +393,13 @@ average joe computer user, moms and dads etc."}
 			$Objs | Out-Gridview
 			#$Objs | Export-CSV -Path "$home\Desktop\BrowserPasswords.csv
 			# REfernce/source code: https://gallery.technet.microsoft.com/scriptcenter/How-to-export-the-history-b3245ae7
-		
+
 		}
-		
-	
+
+
 	function searchREGEXP
 		{
-		
+
 		}
 
 #The SearchFIlesEDM function needs to be associated with the ObjTextBox value in the MenuInput
@@ -322,12 +407,18 @@ average joe computer user, moms and dads etc."}
 #with the value the user inputs in ObjTextBox
 	function searchFilesEDM
 		{
-			#Get-ChildItem -recurse | Select-String -pattern "David" | group path | select name | Out-Gridview
+
+                        # Searches the entire system for the entered search string and outputs all found files matching that string regardless of file extensions
+                        get-psdrive -p "FileSystem" `
+                        | % {write-host -f Green "Searching " $_.Root "for " $x;get-childitem $_.Root -r `
+                        | where-object {$_.name -like "*$x*"} `
+                        | sort-object Length -descending} | Out-Gridview
+                        # Really slow as searching recursively but giving accurate results
 		}
 
 
-	
-	
+
+
 WindowsForm
 
 # Source: https://technet.microsoft.com/en-us/library/ff730941.aspx
