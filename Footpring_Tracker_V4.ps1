@@ -427,3 +427,77 @@ WindowsForm
 
 
 
+# Integration with PowerForensics
+# Instructions on how to set up PowerForensics:
+#https://github.com/Invoke-IR/PowerForensics/wiki/Installation
+
+# Forensics from PowerForensics
+
+# Get-ForensicSid Get-ForensicSid - gets the machine Security Identifier from the SAM hive
+# More examples 
+# http://www.invoke-ir.com/
+
+
+
+# Get-ForensicChildItem -Path C:\
+# Get-ForensicChildItem - returns a directory's contents by parsing the MFT structures
+
+# Display attached hard drives 
+# Get-PhysicalDisk
+
+
+<#
+Start a new PowerShell session and import the PowerForensics module using the commands below:
+
+Get-Module -ListAvailable -Name PowerForensics
+Import-Module PowerForensics
+Get-Command -Module PowerForensics
+
+
+Get-ForensicMasterBootRecord
+ cmdlet that parses the Master Boot Record data structure contained within the first sector of the device specified.  Get-MBR requires the use of the -Path parameter which takes the Win32 Device Namespace (ex. \\.\PHYSICALDRIVE0) for the device from which the MBR should be parsed.
+ Get-ForensicMasterBootRecord \\.\PHYSICALDRIVE0 | Select -ExpandProperty PartitionTable
+ 
+ Get-ForensicMasterBootRecord \\.\PHYSICALDRIVE0 -AsBytes | Format-Hex
+ http://www.invoke-ir.com/2015/05/ontheforensictrail-part2.html
+ 
+ Get-ForensicAttrDef
+ 
+ 
+#>
+
+
+
+
+function doForensics 
+{
+
+#Start by Getting determines a system's timezone based on the registry 
+	Get-Timezone
+
+# Get Physical Disk Information
+	
+wmic diskdrive list	
+# or alternatively 
+wmic diskdrive list brief 
+	
+#Running the next command can be used to determine which partition on each drive is bootable
+Get-ForensicPartitionTable
+
+# gets the VolumeBootRecord from the first sector of the volume (parses $Boot)
+Get-ForensicVolumeBootRecord
+
+#- gets the $Volume file's $VOLUME_INFORMATION attribute
+Get-ForensicVolumeInformation 
+
+# Registry Information 
+#Get-ForensicRegistryKey - gets the keys of the specified registry hive
+#SAM FILE 
+Get-ForensicRegistryKey -HivePath C:\Windows\system32\config\SAM -Recurse
+
+
+
+
+}
+
+
