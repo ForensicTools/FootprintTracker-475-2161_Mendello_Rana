@@ -11,6 +11,7 @@ The purpose of this program is simple, to provide the typical user a free and si
 
 
 
+
 #Program Requirements & Dependencies
 	# ShowUI Must be downloaded and installed
 	# SHowUI is used in the HELP Page
@@ -19,20 +20,6 @@ The purpose of this program is simple, to provide the typical user a free and si
 
 
 To run the program is run like any other powershell script. No command line options are available at this point in time. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Project Features:
